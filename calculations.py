@@ -59,4 +59,54 @@ class Calculations:
 
         return Equations
 
+    def SolveEquations(self, Equations):
 
+        # Forward elimination
+        for i in range(len(Equations)):
+
+            Pivot = Equations[i][i]
+
+            for j in range(i + 1, len(Equations)):
+
+                Factor = Equations[j][i] / Pivot
+
+                for l in range(len(Equations[j])):
+
+                    Equations[j][l] -= Factor * Equations[i][l]
+
+
+        # Back-substitution
+        Solutions = [0] * len(Equations)
+
+        for i in range(len(Equations) - 1, -1, -1):
+
+            RightSide = Equations[i][-1]
+
+            for j in range(i + 1, len(Equations)):
+
+                RightSide -= Equations[i][j] * Solutions[j]
+
+            Solutions[i] = RightSide / Equations[i][i]
+
+        return Solutions
+
+    def GetCoefficients(self, arr, Derivatives):
+
+        Derivatives = [0] + Derivatives + [0]
+
+        Distances  = self.GetPointsDistance(arr, 0)
+
+        Coefficients = []
+
+        for i in  range(len(Distances)):
+
+            Dist = Distances[i]
+
+            a  = (Derivatives[i+1] - Derivatives[i]) / (6 * Dist)
+            b = Derivatives[i] / 2
+            c = (arr[i+1][1] - arr[i][1]) / Dist - Dist * (2 * Derivatives[i] + Derivatives[i+1]) / 6
+            d = arr[i][1]
+
+            Coefficients.append([a, b, c, d])
+
+        return Coefficients
