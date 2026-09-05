@@ -2,7 +2,8 @@ import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-import numpy as np
+from cubic import Cubic
+from calculations import Calculations
 
 class main:
 
@@ -45,8 +46,11 @@ class main:
         self.y1Axis = 0
         self.y2Axis = 10
 
+        self.Cubic = Cubic(0,0,0,0)
+        self.Calc = Calculations()
+
         self.PlottedPoints = []
-        self.Splines = []
+        self.Spline = None
 
         self.axis.set_xlim(self.x1Axis, self.x2Axis)
         self.axis.set_ylim(self.y1Axis, self.y2Axis)
@@ -60,13 +64,30 @@ class main:
 
         self.canvas.draw()
 
-    def OnClick (self, click):
+    def SplineFunction(self):
+
+        if self.Spline is not None:
+            self.Spline.remove()
+
+        RightSide, LeftSide = self.Calc.GetEquations(self.PlottedPoints)
+        Equations = self.Calc.MergeSides(RightSide, LeftSide)
+        Derivative = self.Calc.SolveEquations(Equations)
+        Coefficients = self.Calc.GetCoefficients(self.PlottedPoints, Derivative)
+        XValues, YValues = self.Cubic.GetSplinePoints(self.PlottedPoints, Coefficients)
+
+        self.Spline = self.axis.plot(XValues, YValues)[0]
+
+    def OnClick(self, click):
 
         if click.inaxes != self.axis: return
-        
+
         self.axis.plot(click.xdata, click.ydata, "x")
 
         self.PlottedPoints.append([click.xdata, click.ydata])
+        self.PlottedPoints.sort(key=lambda point: point[0])
+
+        if len(self.PlottedPoints) >= 2:
+            self.SplineFunction()
 
         self.UpdateGraph()
 
