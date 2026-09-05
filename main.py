@@ -37,10 +37,14 @@ class main:
         self.canvas = FigureCanvasTkAgg(self.figure, master=self.window)
         self.canvas.get_tk_widget().pack(fill="both", expand=True)
 
+        # init values
         self.x1Axis = 0
         self.x2Axis = 10
         self.y1Axis = 0
         self.y2Axis = 10
+
+        self.PlottedPoints = []
+        self.Splines = []
 
         self.axis.set_xlim(self.x1Axis, self.x2Axis)
         self.axis.set_ylim(self.y1Axis, self.y2Axis)
@@ -59,6 +63,8 @@ class main:
         if click.inaxes != self.axis: return
         
         self.axis.plot(click.xdata, click.ydata, "x")
+
+        self.PlottedPoints.append([click.xdata, click.ydata])
 
         self.UpdateGraph()
 
@@ -81,6 +87,6 @@ class main:
 
 
 
-        
+
 
 run = main()
