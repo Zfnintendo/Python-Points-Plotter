@@ -23,10 +23,10 @@ class main:
         self.x2Entry.pack()
         self.y2Entry.pack()
 
-        self.x1Entry.bind("<Return>",self.X1Input)
-        self.x2Entry.bind("<Return>",self.X2Input)
-        self.y1Entry.bind("<Return>",self.Y1Input)
-        self.y2Entry.bind("<Return>",self.Y2Input)
+        self.x1Entry.bind("<Return>",self.Input)
+        self.x2Entry.bind("<Return>",self.Input)
+        self.y1Entry.bind("<Return>",self.Input)
+        self.y2Entry.bind("<Return>",self.Input)
         
         self.CreateGraph()
 
@@ -91,23 +91,16 @@ class main:
 
         self.UpdateGraph()
 
+
     # X and y axis inputs
-    def X1Input(self, event):
+    def Input(self, event):
+
         self.x1Axis = float(self.x1Entry.get())
-        self.UpdateGraph()
-
-    def X2Input(self, event):
         self.x2Axis = float(self.x2Entry.get())
-        self.UpdateGraph()
-
-    def Y1Input(self, event):
         self.y1Axis = float(self.y1Entry.get())
-        self.UpdateGraph()
-
-    def Y2Input(self, event):
         self.y2Axis = float(self.y2Entry.get())
-        self.UpdateGraph()
 
+        self.UpdateGraph()
 
 
 
